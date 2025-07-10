@@ -16,19 +16,14 @@ return [
     */
 
     'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout'],
-
     'allowed_methods' => ['*'],
-
-    'allowed_origins' => ['*'],
-
+    'allowed_origins' => ['http://localhost:3000'],  // your Nuxt 3 app
     'allowed_origins_patterns' => [],
-
     'allowed_headers' => ['*'],
-
     'exposed_headers' => [],
-
     'max_age' => 0,
-
     'supports_credentials' => true,
+    'allowed_methods' => ['*'],
+    'exposed_headers' => ['*'],
 
 ];
