@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostController;
 
+// Authentication 
 Route::post('/login', function (Request $request) {
     $request->validate([
         'email' => ['required', 'email'],
@@ -21,8 +23,6 @@ Route::post('/login', function (Request $request) {
 
     return response()->json(['message' => 'Logged in', 'user' => $user]);
 });
-
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', function (Request $request) {
     auth()->guard('web')->logout();
     $request->session()->invalidate();
@@ -30,8 +30,10 @@ Route::post('/logout', function (Request $request) {
 
     return response()->json(['message' => 'Logged out']);
 });
+Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Post 
+Route::get('/posts', [PostController::class, 'index']);
+Route::post('/posts', [PostController::class, 'store']);
+Route::delete('/posts/{id}', [PostController::class, 'destroy']);
 
