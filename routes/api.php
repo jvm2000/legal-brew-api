@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ReactionController;
 
 // Authentication 
 Route::post('/login', function (Request $request) {
@@ -36,4 +38,12 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/posts', [PostController::class, 'index']);
 Route::post('/posts', [PostController::class, 'store']);
 Route::delete('/posts/{id}', [PostController::class, 'destroy']);
+
+// Comments 
+Route::post('/comments', [CommentController::class, 'store']);
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+
+// Reactions 
+Route::post('/reactions', [ReactionController::class, 'store']);
+Route::delete('/reactions/{reaction}', [ReactionController::class, 'destroy']);
 
