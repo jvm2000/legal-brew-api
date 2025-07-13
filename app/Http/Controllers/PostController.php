@@ -11,14 +11,20 @@ class PostController extends Controller
 {
     public function index()
     {
-        return response()->json(Post::all());
+        $posts = \App\Models\Post::with(['user', 'comments', 'reactions'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($posts);
     }
 
-    public function store(Request $request, User $user)
+    public function store(Request $request)
     {
         $form = $request->validate([
-            'description' => 'nullable|string',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'description' => 'string',
+            'hyperlink' => 'nullable|string',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'user_id' => 'string',
         ]);
 
         $imagePaths = [];
@@ -28,10 +34,11 @@ class PostController extends Controller
                 $path = $image->store('posts', 'public');
                 $imagePaths[] = $path;
             }
-        }  
+        } 
 
-        $post = Post::create(['user_id' => $user->id] + $form);
+        $form['images'] = $imagePaths;
 
+        $post = Post::create($form);
 
         return response()->json($post, 201);
     }

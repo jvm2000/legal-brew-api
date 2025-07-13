@@ -22,6 +22,7 @@ class Post extends Model
     protected $fillable = [
         'description',
         'images',
+        'hyperlink',
         'user_id'
     ];
 

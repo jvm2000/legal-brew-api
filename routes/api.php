@@ -13,11 +13,16 @@ use App\Http\Controllers\ReactionController;
 // Authentication 
 Route::post('/login', function (Request $request) {
     $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required'],
+        'login' => ['required', 'string'],
+        'password' => ['required', 'string'],
     ]);
 
-    $user = User::where('email', $request->email)->first();
+    $login = $request->input('login');
+
+    // Check if login is an email
+    $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+    $user = User::where($fieldType, $login)->first();
 
     if (! $user || ! Hash::check($request->password, $user->password)) {
         return response()->json(['message' => 'Invalid credentials'], 401);

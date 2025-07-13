@@ -31,4 +31,7 @@ return [
 
     'supports_credentials' => true,
 
+    'paths' => ['api/*', 'storage/*'],
+    
+    'allowed_origins' => ['http://localhost:3000'],
 ];
