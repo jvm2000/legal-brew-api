@@ -45,6 +45,7 @@ Route::post('/posts', [PostController::class, 'store']);
 Route::delete('/posts/{id}', [PostController::class, 'destroy']);
 
 // Comments 
+Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
 Route::post('/comments', [CommentController::class, 'store']);
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
 
