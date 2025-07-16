@@ -33,33 +33,31 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'username' => ['required', 'string', 'max:255'],
-            'full_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
-            'contact_no' => ['required', 'string', 'min:11'],
+        $form = $request->validate([
+            'username' => 'required|string',
+            'full_name' => 'string|required',
+            'email' => 'string|unique:users,email|email|required',
+            'password' => 'required|string',
+            'birthdate' => 'required|string',
+            'contact_no' => 'required|string',
+            'role' => 'required|string',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+        $imagePaths = [];
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('users', 'public');
+                $imagePaths[] = $path;
+            }
         }
 
-        $user = \App\Models\User::create([
-            'username' => $request->username,
-            'full_name' => $request->full_name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'contact_no' => $request->contact_no,
-        ]);
+        $form['images'] = $imagePaths;
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $user = User::create($form);
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user
-        ], 201);
+        return response()->json($user, 201);
     }
 
     public function logout(Request $request)

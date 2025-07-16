@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -17,10 +19,26 @@ return new class extends Migration
             $table->string('full_name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('birthdate');
             $table->string('contact_no')->unique();
+            $table->string('role');
+            $table->json('images')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
+
+        DB::table('users')->insert([
+            'username' => 'admin',
+            'full_name' => 'admin',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('Admin123'),
+            'birthdate' => '1990-01-01',
+            'contact_no' => '09943173392',
+            'role' => 'admin',
+            'images' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
