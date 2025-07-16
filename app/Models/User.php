@@ -19,10 +19,14 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'username',
+        'full_name',
         'email',
         'password',
+        'birthdate',
         'contact_no',
+        'role',
+        'images',
     ];
 
     /**
@@ -40,11 +44,9 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'images' => 'array',
+    ];
 }

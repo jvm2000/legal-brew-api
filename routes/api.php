@@ -6,14 +6,23 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ReactionController;
 
+// Authentication 
 Route::post('/login', function (Request $request) {
     $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required'],
+        'login' => ['required', 'string'],
+        'password' => ['required', 'string'],
     ]);
 
-    $user = User::where('email', $request->email)->first();
+    $login = $request->input('login');
+
+    // Check if login is an email
+    $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+    $user = User::where($fieldType, $login)->first();
 
     if (! $user || ! Hash::check($request->password, $user->password)) {
         return response()->json(['message' => 'Invalid credentials'], 401);
@@ -21,8 +30,6 @@ Route::post('/login', function (Request $request) {
 
     return response()->json(['message' => 'Logged in', 'user' => $user]);
 });
-
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', function (Request $request) {
     auth()->guard('web')->logout();
     $request->session()->invalidate();
@@ -30,8 +37,19 @@ Route::post('/logout', function (Request $request) {
 
     return response()->json(['message' => 'Logged out']);
 });
+Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Post 
+Route::get('/posts', [PostController::class, 'index']);
+Route::post('/posts', [PostController::class, 'store']);
+Route::delete('/posts/{id}', [PostController::class, 'destroy']);
+
+// Comments 
+Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
+Route::post('/comments', [CommentController::class, 'store']);
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+
+// Reactions 
+Route::post('/reactions', [ReactionController::class, 'store']);
+Route::delete('/reactions/{reaction}', [ReactionController::class, 'destroy']);
 
