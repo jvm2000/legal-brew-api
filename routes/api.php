@@ -28,14 +28,22 @@ Route::post('/login', function (Request $request) {
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
-    return response()->json(['message' => 'Logged in', 'user' => $user]);
+    return response()->json([
+        'token' => $user->createToken('api-token')->plainTextToken,
+        'token_type' => 'Bearer',
+        'user' => $user
+    ]);
 });
-Route::post('/logout', function (Request $request) {
-    auth()->guard('web')->logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
+    $user = $request->user();
 
-    return response()->json(['message' => 'Logged out']);
+    if ($user && $user->currentAccessToken()) {
+        $user->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out successfully']);
+    }
+
+    return response()->json(['message' => 'Not authenticated or token missing'], 401);
 });
 Route::post('/register', [AuthController::class, 'register']);
 

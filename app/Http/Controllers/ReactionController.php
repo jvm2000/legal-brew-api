@@ -12,13 +12,14 @@ class ReactionController extends Controller
     {
         $data = $request->validate([
             'post_id' => 'required|exists:posts,id',
+            'user_id' => 'required|exists:users,id',
             'type' => 'required|string', // e.g. like, love, etc.
         ]);
 
         $reaction = Reaction::updateOrCreate(
             [
                 'post_id' => $data['post_id'],
-                'user_id' => Auth::id(),
+                'user_id' => $data['user_id'],
             ],
             ['type' => $data['type']]
         );
