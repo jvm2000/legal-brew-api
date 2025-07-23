@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ReactionController;
 
 // Authentication 
@@ -46,6 +48,9 @@ Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
     return response()->json(['message' => 'Not authenticated or token missing'], 401);
 });
 Route::post('/register', [AuthController::class, 'register']);
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 // Post 
 Route::get('/posts', [PostController::class, 'index']);
@@ -60,4 +65,14 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
 // Reactions 
 Route::post('/reactions', [ReactionController::class, 'store']);
 Route::delete('/reactions/{reaction}', [ReactionController::class, 'destroy']);
+
+// Carts 
+Route::get('/cart/{user}', [CartController::class, 'index']);
+Route::post('/carts', [CartController::class, 'store']);
+Route::delete('/carts/{cart}', [CartController::class, 'destroy']);
+
+// Services 
+Route::get  ('/cart/{cart}/services', [ServiceController::class, 'index']);
+Route::post('/services', [ServiceController::class, 'store']);
+Route::delete('/services/{reaction}', [ServiceController::class, 'destroy']);
 
