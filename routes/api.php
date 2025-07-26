@@ -55,7 +55,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Post 
 Route::get('/posts', [PostController::class, 'index']);
 Route::post('/posts', [PostController::class, 'store']);
-Route::delete('/posts/{id}', [PostController::class, 'destroy']);
+Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 
 // Comments 
 Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
@@ -74,5 +74,5 @@ Route::delete('/carts/{cart}', [CartController::class, 'destroy']);
 // Services 
 Route::get  ('/cart/{cart}/services', [ServiceController::class, 'index']);
 Route::post('/services', [ServiceController::class, 'store']);
-Route::delete('/services/{reaction}', [ServiceController::class, 'destroy']);
+Route::delete('/services/{service}', [ServiceController::class, 'destroy']);
 
