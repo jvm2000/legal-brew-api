@@ -11,6 +11,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ReactionController;
+use App\Http\Controllers\MenuServicesController;
 
 // Authentication 
 Route::post('/login', function (Request $request) {
@@ -74,8 +75,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/carts/{cart}', [CartController::class, 'destroy']);
 
     // Services 
-    Route::get  ('/cart/{cart}/services', [ServiceController::class, 'index']);
+    Route::get ('/cart/{cart}/services', [ServiceController::class, 'index']);
     Route::post('/services', [ServiceController::class, 'store']);
     Route::delete('/services/{service}', [ServiceController::class, 'destroy']);
+
+    // Menu Services
+    Route::get('/menuservices', [MenuServicesController::class, 'index']);
 });
 
