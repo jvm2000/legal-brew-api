@@ -52,28 +52,30 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Post 
-Route::get('/posts', [PostController::class, 'index']);
-Route::post('/posts', [PostController::class, 'store']);
-Route::put('/posts/{post}', [PostController::class, 'update']);
-Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+Route::middleware('auth:sanctum')->group(function () {
+    // Post routes
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::post('/posts', [PostController::class, 'store']);
+    Route::put('/posts/{post}', [PostController::class, 'update']);
+    Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 
-// Comments 
-Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
-Route::post('/comments', [CommentController::class, 'store']);
-Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+    // Comments 
+    Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
+    Route::post('/comments', [CommentController::class, 'store']);
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
 
-// Reactions 
-Route::post('/reactions', [ReactionController::class, 'store']);
-Route::delete('/reactions/{reaction}', [ReactionController::class, 'destroy']);
+    // Reactions 
+    Route::post('/reactions', [ReactionController::class, 'store']);
+    Route::delete('/reactions/{reaction}', [ReactionController::class, 'destroy']);
 
-// Carts 
-Route::get('/cart/{user}', [CartController::class, 'index']);
-Route::post('/carts', [CartController::class, 'store']);
-Route::delete('/carts/{cart}', [CartController::class, 'destroy']);
+    // Carts 
+    Route::get('/cart/{user}', [CartController::class, 'index']);
+    Route::post('/carts', [CartController::class, 'store']);
+    Route::delete('/carts/{cart}', [CartController::class, 'destroy']);
 
-// Services 
-Route::get  ('/cart/{cart}/services', [ServiceController::class, 'index']);
-Route::post('/services', [ServiceController::class, 'store']);
-Route::delete('/services/{service}', [ServiceController::class, 'destroy']);
+    // Services 
+    Route::get  ('/cart/{cart}/services', [ServiceController::class, 'index']);
+    Route::post('/services', [ServiceController::class, 'store']);
+    Route::delete('/services/{service}', [ServiceController::class, 'destroy']);
+});
 
