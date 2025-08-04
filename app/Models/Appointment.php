@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Cart;
-use App\Models\Appointment;
+use App\Models\Service;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Service extends Model
+class Appointment extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
@@ -20,20 +19,26 @@ class Service extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'cart_id',
-        'appointment_id',
-        'name',
-        'description',
-        'price',
+        'setup',
+        'scheduledDay',
+        'scheduledTime',
+        'services',
+        'user_id'
     ];
 
-    public function cart()
+    protected $casts = [
+        'services' => 'array',
+        'scheduledDay' => 'date',
+        'scheduledTime' => 'datetime:H:i',
+    ];
+
+    public function user()
     {
-        return $this->belongsTo(Cart::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function appointment()
+    public function services()
     {
-        return $this->belongsTo(Appointment::class);
+        return $this->hasMany(Service::class);
     }
 }

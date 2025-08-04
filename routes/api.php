@@ -9,8 +9,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ReactionController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\MenuServicesController;
 
 // Authentication 
@@ -81,5 +83,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Menu Services
     Route::get('/menuservices', [MenuServicesController::class, 'index']);
+
+    // Make Apopointments p
+    Route::post('/appointments', [AppointmentController::class, 'store']);
+
+    // Make Payments 
+    Route::post('/pay/gcash', [PaymentController::class, 'gcash']);
 });
 

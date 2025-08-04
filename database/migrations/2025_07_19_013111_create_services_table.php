@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Cart;
+use App\Models\Appointment;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -17,7 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->integer('price');
-            $table->foreignIdFor(Cart::class);
+            $table->foreignIdFor(Cart::class)->nullable();
+            $table->foreignIdFor(Appointment::class)->nullable();
             $table->timestamps();
         });
     }

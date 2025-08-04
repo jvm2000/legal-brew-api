@@ -19,17 +19,14 @@ class Payment extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'appointment_id',
         'method',
         'amount',
         'currency',
-        'services',
     ];
 
-    protected $casts = [
-        'services' => 'array',
-    ];
-    
-    public function services() {
-        return $this->hasMany(Service::class);
+    public function appointment()
+    {
+        return $this->belongsTo(Appointment::class);
     }
 }
