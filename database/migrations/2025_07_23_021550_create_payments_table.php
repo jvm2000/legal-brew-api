@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Cart;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,13 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->integer('price');
-            $table->foreignIdFor(Cart::class)->nullable();
-            $table->foreignIdFor(Appointment::class)->nullable();
+            $table->string('method');
+            $table->integer('amount');
+            $table->string('currency');
+            $table->foreignIdFor(Appointment::class);
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('payments');
     }
 };

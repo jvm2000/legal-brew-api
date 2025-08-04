@@ -43,6 +43,33 @@ class PostController extends Controller
         return response()->json($post, 201);
     }
 
+    // Update post 
+    public function update(Request $request, Post $post)
+    {
+        $form = $request->validate([
+            'description' => 'string',
+            'hyperlink' => 'nullable|string',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'user_id' => 'string',
+        ]);
+
+        $imagePaths = $post->images ?? [];
+
+        if ($request->hasFile('images')) {
+            $imagePaths = [];
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('posts', 'public');
+                $imagePaths[] = $path;
+            }
+        }
+
+        $form['images'] = $imagePaths;
+
+        $post->update($form);
+
+        return response()->json($post, 200);
+    }
+    
     // Delete a post
     public function destroy($id)
     {
