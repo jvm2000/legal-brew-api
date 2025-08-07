@@ -26,14 +26,12 @@ class PaymentController extends Controller
 
     public function gcash(Request $request)
     {
-        // Validate input
         $data = $request->validate([
             'amount' => 'required|integer|min:1',
             'description' => 'required|string|max:255',
             'remarks' => 'nullable|string|max:255',
         ]);
 
-        // Build the JSON payload
         $payload = [
             'data' => [
                 'attributes' => [
@@ -52,7 +50,6 @@ class PaymentController extends Controller
             ])
             ->post('https://api.paymongo.com/v1/links', $payload);
 
-        // Return response or error
         if ($response->successful()) {
             $checkoutUrl = $response->json()['data']['attributes']['checkout_url'];
             return response()->json(['checkout_url' => $checkoutUrl]);
