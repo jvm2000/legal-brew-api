@@ -60,6 +60,44 @@ class AuthController extends Controller
         return response()->json($user, 201);
     }
 
+    public function update(Request $request)
+    {
+        $user = $request->user();
+
+        $form = $request->validate([
+            'username' => 'sometimes|string|max:255',
+            'full_name' => 'sometimes|string|max:255',
+            'contact_no' => 'sometimes|string|max:255',
+            'birthdate' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|unique:users,email,' . $user->id,
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        foreach ($form as $key => $value) {
+            if ($key !== 'images') {
+                $user->$key = $value;
+            }
+        }
+
+        if ($request->hasFile('images')) {
+            $imagePaths = [];
+
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('users', 'public');
+                $imagePaths[] = $path;
+            }
+
+            $user->images = $imagePaths;
+        }
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'User updated successfully',
+            'user' => $user
+        ]);
+    }
+
     public function logout(Request $request)
     {
         // Revoke the token used for the current request
