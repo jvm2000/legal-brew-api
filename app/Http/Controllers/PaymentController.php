@@ -26,21 +26,41 @@ class PaymentController extends Controller
 
     public function gcash(Request $request)
     {
-        $response = Http::withBasicAuth(env('PAYMONGO_SECRET_KEY'), '')
-            ->post('https://api.paymongo.com/v1/sources', [
-                'data' => [
-                    'attributes' => [
-                        'amount' => $request->amount * 100,
-                        'redirect' => [
-                            'success' => url('/payment/success'),
-                            'failed' => url('/payment/failed'),
-                        ],
-                        'type' => 'gcash',
-                        'currency' => 'PHP',
-                    ]
-                ]
-            ]);
+        // Validate input
+        $data = $request->validate([
+            'amount' => 'required|integer|min:1',
+            'description' => 'required|string|max:255',
+            'remarks' => 'nullable|string|max:255',
+        ]);
 
-        return $response->json(); // returns the GCash payment URL and source ID
+        // Build the JSON payload
+        $payload = [
+            'data' => [
+                'attributes' => [
+                    'amount' => $data['amount'] * 100,
+                    'description' => $data['description'],
+                    'remarks' => $data['remarks'] ?? '',
+                ],
+            ],
+        ];
+
+        $response = Http::withOptions(['verify' => false])
+            ->withBasicAuth(env('PAYMONGO_SECRET_KEY'), '')
+            ->withHeaders([
+                'accept' => 'application/json',
+                'content-type' => 'application/json',
+            ])
+            ->post('https://api.paymongo.com/v1/links', $payload);
+
+        // Return response or error
+        if ($response->successful()) {
+            $checkoutUrl = $response->json()['data']['attributes']['checkout_url'];
+            return response()->json(['checkout_url' => $checkoutUrl]);
+        }
+
+        return response()->json([
+            'message' => 'Error creating payment link',
+            'details' => $response->json(),
+        ], $response->status());
     }
 }
