@@ -14,7 +14,6 @@ class ServiceController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        
         return response()->json($services);
     }
 

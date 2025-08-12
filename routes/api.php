@@ -77,7 +77,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Carts 
     Route::get('/cart/{user}', [CartController::class, 'index']);
     Route::post('/carts', [CartController::class, 'store']);
-    Route::delete('/carts/{cart}', [CartController::class, 'destroy']);
+    Route::delete('/carts', [CartController::class, 'destroy']);
 
     // Services 
     Route::get ('/cart/{cart}/services', [ServiceController::class, 'index']);
@@ -87,7 +87,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Menu Services
     Route::get('/menuservices', [MenuServicesController::class, 'index']);
 
-    // Make Apopointments p
+    // Make Apopointments
+    Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::post('/appointments', [AppointmentController::class, 'store']);
 
     // Make Payments 
