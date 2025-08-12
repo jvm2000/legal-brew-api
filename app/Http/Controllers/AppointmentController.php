@@ -10,13 +10,16 @@ use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $posts = \App\Models\Appointment::with(['services'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = \App\Models\Appointment::with(['services', 'user'])
+            ->orderBy('created_at', 'asc');
 
-        return response()->json($posts);
+        if ($request->has('scheduledDay')) {
+            $query->where('scheduledDay', $request->scheduledDay);
+        }
+
+        return response()->json($query->get());
     }
 
     public function store(Request $request)
