@@ -14,6 +14,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\MenuServicesController;
+use App\Http\Controllers\VerificationController;
 
 // Authentication 
 Route::post('/login', function (Request $request) {
@@ -52,10 +53,14 @@ Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
 });
 Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    return $request->user()->setAttribute('verified', $request->user()->hasVerifiedEmail());
 });
+Route::post('/verification/send', [VerificationController::class, 'sendCode']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    // Send Code 
+    Route::post('/verification/check', [VerificationController::class, 'verifyCode']);
+
     // User routes 
     Route::put('/userUpdate', [AuthController::class, 'update']);
 
@@ -93,6 +98,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::put('/appointments/{appointment}', [AppointmentController::class, 'update']);
     Route::delete('/appointments/{appointment}', [AppointmentController::class, 'delete']);
+    
+    Route::post('/appointments/check-availability', [AppointmentController::class, 'checkAvailability']);
 
     // Make Payments 
     Route::post('/pay/gcash', [PaymentController::class, 'gcash']);

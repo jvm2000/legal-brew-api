@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
+            $table->string('username')->unique(); 
             $table->string('full_name');
             $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('birthdate');
             $table->string('contact_no')->unique();
@@ -31,6 +32,7 @@ return new class extends Migration
             'username' => 'admin',
             'full_name' => 'admin',
             'email' => 'admin@example.com',
+            'email_verified_at' => now(), // ✅ Mark admin as verified
             'password' => Hash::make('Admin123'),
             'birthdate' => '1990-01-01',
             'contact_no' => '09943173392',

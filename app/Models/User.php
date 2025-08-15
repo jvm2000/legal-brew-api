@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Cart;
+use App\Models\VerificationCode;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
@@ -23,6 +24,7 @@ class User extends Authenticatable
         'username',
         'full_name',
         'email',
+        'email_verified_at',
         'password',
         'birthdate',
         'contact_no',
@@ -53,5 +55,10 @@ class User extends Authenticatable
 
     public function cart() {
         return $this->hasOne(Cart::class);
+    }
+
+     public function verificationCodes()
+    {
+        return $this->hasMany(VerificationCode::class);
     }
 }

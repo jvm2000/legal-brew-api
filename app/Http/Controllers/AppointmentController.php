@@ -78,4 +78,20 @@ class AppointmentController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function checkAvailability(Request $request)
+    {
+        $request->validate([
+            'scheduledDay' => 'required|date',
+            'scheduledTime' => 'required|date_format:H:i',
+        ]);
+
+        $exists = Appointment::whereDate('scheduledDay', $request->scheduledDay)
+            ->whereTime('scheduledTime', $request->scheduledTime)
+            ->exists();
+
+        return response()->json([
+            'exists' => $exists
+        ]);
+    }
 }
