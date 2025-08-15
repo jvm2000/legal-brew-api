@@ -22,6 +22,14 @@ class AppointmentController extends Controller
         return response()->json($query->get());
     }
 
+    public function getAll()
+    {
+        $query = \App\Models\Appointment::with(['services', 'user'])
+            ->orderBy('created_at', 'asc');
+
+        return response()->json($query->get());
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -48,5 +56,42 @@ class AppointmentController extends Controller
             'message' => 'Appointment created and services attached.',
             'appointment' => $appointment->load('services'),
         ], 201);
+    }
+
+    public function update(Request $request, Appointment $appointment) {
+        $data = $request->validate([
+            'scheduledDay' => 'required|date',
+            'scheduledTime' => 'required|date_format:H:i',
+        ]);
+
+        $appointment->update($data);
+
+        return response()->json([
+            'message'    => 'Appointment updated successfully',
+            'appointment'=> $appointment
+        ]);
+    }
+
+    public function destroy(Appointment $appointment)
+    {
+        $appointment->delete();
+
+        return response()->json(null, 204);
+    }
+
+    public function checkAvailability(Request $request)
+    {
+        $request->validate([
+            'scheduledDay' => 'required|date',
+            'scheduledTime' => 'required|date_format:H:i',
+        ]);
+
+        $exists = Appointment::whereDate('scheduledDay', $request->scheduledDay)
+            ->whereTime('scheduledTime', $request->scheduledTime)
+            ->exists();
+
+        return response()->json([
+            'exists' => $exists
+        ]);
     }
 }
