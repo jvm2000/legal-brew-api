@@ -57,7 +57,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     // User routes 
-    Route::put('/userUpdate', [PostController::class, 'update']);
+    Route::put('/userUpdate', [AuthController::class, 'update']);
 
     // Post routes
     Route::get('/posts', [PostController::class, 'index']);
@@ -89,7 +89,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Make Apopointments
     Route::get('/appointments', [AppointmentController::class, 'index']);
+    Route::get('/appointments/getAll', [AppointmentController::class, 'getAll']);
     Route::post('/appointments', [AppointmentController::class, 'store']);
+    Route::put('/appointments/{appointment}', [AppointmentController::class, 'update']);
+    Route::delete('/appointments/{appointment}', [AppointmentController::class, 'delete']);
 
     // Make Payments 
     Route::post('/pay/gcash', [PaymentController::class, 'gcash']);
