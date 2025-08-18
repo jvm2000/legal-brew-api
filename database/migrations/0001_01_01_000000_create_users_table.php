@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
@@ -28,7 +29,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::table('users')->insert([
+        User::create([
             'username' => 'admin',
             'full_name' => 'admin',
             'email' => 'admin@example.com',
