@@ -6,7 +6,9 @@ use App\Models\Service;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Mail\AppointmentCreatedMail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class AppointmentController extends Controller
 {
@@ -37,7 +39,7 @@ class AppointmentController extends Controller
             'scheduledDay' => 'required|date',
             'scheduledTime' => 'required|date_format:H:i',
             'services' => 'required|array',
-            'services.*' => 'integer',
+            'services.*' => 'string',
         ]);
 
         DB::beginTransaction();
@@ -47,10 +49,14 @@ class AppointmentController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        $serviceIds = $data['services'];
-        Service::whereIn('id', $serviceIds)->update(['appointment_id' => $appointment->id]);
+        Service::whereIn('id', $data['services'])
+            ->update(['appointment_id' => $appointment->id]);
 
+        $appointment->load('services', 'user');
+        
         DB::commit();
+
+        Mail::to(Auth::user()->email)->send(new AppointmentCreatedMail($appointment->load('services', 'user') ));
 
         return response()->json([
             'message' => 'Appointment created and services attached.',

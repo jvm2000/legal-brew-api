@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('verification_codes', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('code');
             $table->timestamp('expires_at');
             $table->foreignIdFor(User::class);

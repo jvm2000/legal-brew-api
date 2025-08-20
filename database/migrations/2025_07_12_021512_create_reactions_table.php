@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reactions', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('type');
             $table->foreignIdFor(Post::class);
             $table->foreignIdFor(User::class);

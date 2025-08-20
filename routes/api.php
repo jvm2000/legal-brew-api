@@ -97,7 +97,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/appointments/getAll', [AppointmentController::class, 'getAll']);
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::put('/appointments/{appointment}', [AppointmentController::class, 'update']);
-    Route::delete('/appointments/{appointment}', [AppointmentController::class, 'delete']);
+    Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy']);
     
     Route::post('/appointments/check-availability', [AppointmentController::class, 'checkAvailability']);
 
