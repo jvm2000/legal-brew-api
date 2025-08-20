@@ -26,7 +26,7 @@ class AppointmentCreatedMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Your Appointment Confirmation')
+        return $this->subject('Appointment Notice')
                     ->view('emails.appointment-created');
     }
 }

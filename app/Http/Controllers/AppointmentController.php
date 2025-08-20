@@ -49,12 +49,14 @@ class AppointmentController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        $serviceIds = $data['services'];
-        Service::whereIn('id', $serviceIds)->update(['appointment_id' => $appointment->id]);
+        Service::whereIn('id', $data['services'])
+            ->update(['appointment_id' => $appointment->id]);
 
+        $appointment->load('services', 'user');
+        
         DB::commit();
 
-        // Mail::to(Auth::user()->email)->send(new AppointmentCreatedMail($appointment->load('services', 'user')));
+        Mail::to(Auth::user()->email)->send(new AppointmentCreatedMail($appointment->load('services', 'user') ));
 
         return response()->json([
             'message' => 'Appointment created and services attached.',
