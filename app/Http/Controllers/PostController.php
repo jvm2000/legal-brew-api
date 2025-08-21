@@ -9,14 +9,21 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = 5;
+        $page = $request->input('page', 1); 
+
+        $limit = $perPage * $page;
+
         $posts = \App\Models\Post::with(['user', 'comments', 'reactions'])
             ->orderBy('created_at', 'desc')
+            ->take($limit)
             ->get();
 
         return response()->json($posts);
     }
+
 
     public function store(Request $request)
     {
@@ -48,15 +55,14 @@ class PostController extends Controller
     {
         $form = $request->validate([
             'description' => 'string',
-            'hyperlink' => 'nullable|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'user_id' => 'string',
+            'hyperlink'   => 'nullable|string',
+            'images.*'    => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'user_id'     => 'string',
         ]);
 
         $imagePaths = $post->images ?? [];
 
         if ($request->hasFile('images')) {
-            $imagePaths = [];
             foreach ($request->file('images') as $image) {
                 $path = $image->store('posts', 'public');
                 $imagePaths[] = $path;
@@ -69,6 +75,7 @@ class PostController extends Controller
 
         return response()->json($post, 200);
     }
+
     
     // Delete a post
     public function destroy($id)
