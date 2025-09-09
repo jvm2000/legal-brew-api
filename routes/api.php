@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ReactionController;
@@ -56,6 +57,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user()->setAttribute('verified', $request->user()->hasVerifiedEmail());
 });
 Route::post('/verification/send', [VerificationController::class, 'sendCode']);
+Route::post('/send-message', [ContactController::class, 'send']);
 
 Route::middleware('auth:sanctum')->group(function () {
     // Send Code 
