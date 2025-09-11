@@ -33,31 +33,51 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $form = $request->validate([
-            'username' => 'required|string',
-            'full_name' => 'string|required',
-            'email' => 'string|unique:users,email|email|required',
-            'password' => 'required|string',
-            'birthdate' => 'required|string',
-            'contact_no' => 'required|string',
-            'role' => 'required|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+        try {
+            $form = $request->validate([
+                'username'   => 'required|string|unique:users,username',
+                'full_name'  => 'required|string',
+                'email'      => 'required|email|unique:users,email',
+                'password'   => 'required|string',
+                'birthdate'  => 'required|string',
+                'contact_no' => 'required|string|unique:users,contact_no',
+                'role'       => 'required|string',
+                'images.*'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
 
-        $imagePaths = [];
+            $imagePaths = [];
 
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('users', 'public');
-                $imagePaths[] = $path;
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('users', 'public');
+                    $imagePaths[] = $path;
+                }
             }
+
+            $form['images'] = $imagePaths;
+
+            $user = User::create($form);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User registered successfully.',
+                'data'    => $user
+            ], 201);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors'  => $e->errors(),
+            ], 422);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Registration failed due to an internal error.',
+                'error'   => $e->getMessage(),
+            ], 500);
         }
-
-        $form['images'] = $imagePaths;
-
-        $user = User::create($form);
-
-        return response()->json($user, 201);
     }
 
     public function update(Request $request)
