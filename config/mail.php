@@ -99,8 +99,9 @@ return [
             'retry_after' => 60,
         ],
 
-        'mailgun' => [
-            'transport' => 'mailgun',
+        'from' => [
+            'address' => env('MAIL_FROM_ADDRESS', 'noreply@yourdomain.com'),
+            'name' => env('MAIL_FROM_NAME', 'Your App Name'),
         ],
 
     ],
