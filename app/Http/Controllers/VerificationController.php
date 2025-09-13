@@ -28,7 +28,10 @@ class VerificationController extends Controller
         );
 
         // Send via email
-        Mail::to($user->email)->send(new VerificationCodeMail($code));
+        Mail::raw("Your verification code is: {$code}", function ($message) use ($request) {
+            $message->to($request->email)
+                    ->subject('Verification Code');
+        });
 
         return response()->json(['message' => 'Verification code sent successfully.']);
     }
