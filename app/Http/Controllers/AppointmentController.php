@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Mail\AppointmentCreatedMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\AppointmentRescheduleMail;
 
 class AppointmentController extends Controller
 {
@@ -71,6 +72,10 @@ class AppointmentController extends Controller
         ]);
 
         $appointment->update($data);
+
+        if ($appointment->user && $appointment->user->email) {
+            Mail::to($appointment->user->email)->send(new AppointmentRescheduleMail($appointment));
+        }
 
         return response()->json([
             'message'    => 'Appointment updated successfully',
