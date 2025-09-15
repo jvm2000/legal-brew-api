@@ -30,13 +30,13 @@ return new class extends Migration
         });
 
         User::create([
-            'username' => 'admin',
-            'full_name' => 'admin',
-            'email' => 'admin@example.com',
+            'username' => 'admin@restauro',
+            'full_name' => 'Ruth Restauro',
+            'email' => 'ruth.restauro2018@gmail.com',
             'email_verified_at' => now(), // ✅ Mark admin as verified
-            'password' => Hash::make('Admin123'),
+            'password' => Hash::make('\aZ2136VG4[w'),
             'birthdate' => '1990-01-01',
-            'contact_no' => '09943173392',
+            'contact_no' => 'ruth.restauro2018@gmail.com',
             'role' => 'admin',
             'images' => null,
             'created_at' => now(),

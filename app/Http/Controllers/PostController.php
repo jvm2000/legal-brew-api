@@ -24,11 +24,27 @@ class PostController extends Controller
         return response()->json($posts);
     }
 
+    public function getForLandingPage(Request $request)
+    {
+        $perPage = 5;
+        $page = $request->input('page', 1); 
+
+        $limit = $perPage * $page;
+
+        $posts = \App\Models\Post::with(['user', 'comments', 'reactions'])
+            ->orderBy('created_at', 'desc')
+            ->take($limit)
+            ->get();
+
+        return response()->json($posts);
+    }
+
 
     public function store(Request $request)
     {
         $form = $request->validate([
             'description' => 'string',
+            'title' => 'nullable|string',
             'hyperlink' => 'nullable|string',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'user_id' => 'string',
@@ -55,6 +71,7 @@ class PostController extends Controller
     {
         $form = $request->validate([
             'description' => 'string',
+            'title' => 'string|nullable',
             'hyperlink'   => 'nullable|string',
             'images.*'    => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'user_id'     => 'string',

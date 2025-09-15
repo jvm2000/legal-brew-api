@@ -41,6 +41,7 @@ Route::post('/login', function (Request $request) {
         'user' => $user
     ]);
 });
+Route::get('/postsLanding', [PostController::class, 'getForLandingPage']);
 Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
     $user = $request->user();
 
