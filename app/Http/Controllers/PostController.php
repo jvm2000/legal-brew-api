@@ -32,7 +32,7 @@ class PostController extends Controller
         $limit = $perPage * $page;
 
         $posts = \App\Models\Post::with(['user', 'comments', 'reactions'])
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->take($limit)
             ->get();
 
