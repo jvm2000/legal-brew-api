@@ -46,9 +46,9 @@ class MenuServiceSeeder extends Seeder
         ]);
 
         MenuServices::create([
-            'name' => 'Barista Grind',
-            'price' => 2000,
-            'description' => 'Thorough research and analysis of legal issues, study of applicable laws and statutes, and provision of legal documentation and research services.',
+            'name' => 'Capuccino Case Files',
+            'price' => 20000,
+            'description' => 'Assistance with litigation of cases, including court representation and preparation of pleadings in the areas of: Labor law, Marriage and family relations, Property law, Corporate law, Immigration law',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
