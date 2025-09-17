@@ -1,2 +1,2 @@
-<p>We’ve generated your verification code: <strong>{{ $code }}</strong>.</p>
-<p>Please enter this code in the verification field to complete your sign-in process.</p>
+<p>Restauro Legal Services: Your verification code is <strong>{{ $code }}</strong>.</p>
+<p>Please use this code within 5 minutes.</p>

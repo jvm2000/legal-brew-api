@@ -57,7 +57,7 @@ class AppointmentController extends Controller
         
         DB::commit();
 
-        Mail::to([Auth::user()->email, config('mail.from.address')])
+        Mail::to([Auth::user()->email, 'ruth.restauro2018@gmail.com'])
             ->send(new AppointmentCreatedMail(
                 $appointment->load('services', 'user')
             ));
