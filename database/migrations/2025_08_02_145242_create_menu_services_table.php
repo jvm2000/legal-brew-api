@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('menu_services', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->integer('price');
             $table->text('description');
             $table->timestamps();
         });

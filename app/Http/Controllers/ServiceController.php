@@ -10,7 +10,8 @@ class ServiceController extends Controller
 {
     public function index(Cart $cart)
     {
-        $services = \App\Models\Service::where('cart_id', $cart->id)
+        $services = \App\Models\Service::with('menuService')
+            ->where('cart_id', $cart->id)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -21,9 +22,8 @@ class ServiceController extends Controller
     {
         $form = $request->validate([
             'cart_id' => 'required|exists:carts,id',
-            'name' => 'required|string',
-            'description' => 'required',
-            'price' => 'required',
+            'menu_services_id' => 'required|string',
+            'details' => 'required',
         ]);
 
         $service = Service::create($form);

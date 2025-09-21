@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Cart;
-use App\Models\Appointment;
 use Illuminate\Support\Str;
+use App\Models\MenuServices;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Service extends Model
+class SubService extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
@@ -21,26 +20,9 @@ class Service extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'cart_id',
-        'menu_services_id',
-        'appointment_id',
         'details',
+        'menu_services_id',
     ];
-
-    public function cart()
-    {
-        return $this->belongsTo(Cart::class);
-    }
-
-    public function menuService()
-    {
-        return $this->belongsTo(MenuServices::class, 'menu_services_id');
-    }
-
-    public function appointment()
-    {
-        return $this->belongsTo(Appointment::class);
-    }
 
     public $incrementing = false;
 
@@ -55,5 +37,9 @@ class Service extends Model
                 $model->{$model->getKeyName()} = (string) Str::uuid();
             }
         });
+    }
+
+    public function menuService() {
+        return $this->belongsTo(MenuServices::class);
     }
 }

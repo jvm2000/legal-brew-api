@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\SubService;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
@@ -37,5 +38,9 @@ class MenuServices extends Model
                 $model->{$model->getKeyName()} = (string) Str::uuid();
             }
         });
+    }
+
+    public function subServices() {
+        return $this->hasMany(SubService::class);
     }
 }
