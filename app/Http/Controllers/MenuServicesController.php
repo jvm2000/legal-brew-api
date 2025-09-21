@@ -9,7 +9,9 @@ class MenuServicesController extends Controller
 {
     public function index()
     {
-        $menuServices = MenuServices::get();
+        $menuServices = MenuServices::with('subServices')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return response()->json($menuServices);
     }
