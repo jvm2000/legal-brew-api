@@ -95,6 +95,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Menu Services
     Route::get('/menuservices', [MenuServicesController::class, 'index']);
+    Route::put('/menuservices/{subservice}', [MenuServicesController::class, 'update']);
 
     // Make Apopointments
     Route::get('/appointments', [AppointmentController::class, 'index']);

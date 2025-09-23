@@ -21,7 +21,6 @@ class MenuServices extends Model
      */
     protected $fillable = [
         'name',
-        'price',
         'description',
     ];
 
